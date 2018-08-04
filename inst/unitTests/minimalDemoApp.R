@@ -4,6 +4,10 @@ library(htmlwidgets)
 #----------------------------------------------------------------------------------------------------
 ui = shinyUI(fluidPage(
 
+  tags$head(
+    tags$link(rel="icon", href="data:;base64,iVBORw0KGgo=")
+    ),
+
   sidebarLayout(
      sidebarPanel(
         actionButton("randomRoiButton", "Random roi"),
@@ -29,7 +33,7 @@ server = function(input, output, session) {
 
   output$value <- renderPrint({ input$action })
   output$nglShiny <- renderNglShiny(
-    nglShiny("hello shinyApp")
+    nglShiny("hello shinyApp", 300, 300)
     )
 
 } # server

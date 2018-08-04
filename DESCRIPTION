@@ -1,7 +1,7 @@
 Package: nglShiny
 Title: nglShiny
-Version: 0.99.01
-Date: 2018-06-17
+Version: 0.99.02
+Date: 2018-08-04
 Author: Paul Shannon
 Maintainer: Paul Shannon <pshannon@systemsbiology.org>
 Description: ngl.js as a shiny widget
