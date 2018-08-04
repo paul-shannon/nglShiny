@@ -1,0 +1,11 @@
+Package: nglShiny
+Title: nglShiny
+Version: 0.99.01
+Date: 2018-06-17
+Author: Paul Shannon
+Maintainer: Paul Shannon <pshannon@systemsbiology.org>
+Description: ngl.js as a shiny widget
+Depends: R (>= 3.4.2)
+License: MIT
+Encoding: UTF-8
+LazyData: true
