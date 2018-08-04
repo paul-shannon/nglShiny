@@ -6,11 +6,15 @@ HTMLWidgets.widget({
   factory: function(el, width, height) {
     console.log("manufacturing nglShiny widget");
     return {
-       renderValue: function(x) {
+       renderValue: function(options) {
+          console.log("---- options");
+          console.log(options)
           var stage;
           stage = new NGL.Stage(el);
           window.stage = stage;
-          stage.loadFile("rcsb://1pcr", {defaultRepresentation: true});
+          uri = "rcsb://" + options.pdbID;
+          stage.loadFile(uri, {defaultRepresentation: true});
+          //stage.loadFile("rcsb://1pcr", {defaultRepresentation: true});
           },
        resize: function(width, height) {
           console.log("entering resize");

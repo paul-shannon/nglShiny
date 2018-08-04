@@ -32,8 +32,11 @@ server = function(input, output, session) {
       })
 
   output$value <- renderPrint({ input$action })
+   options <- list(pdbID="1pcr")
+   options <- list(pdbID="3kvk")
+   options <- list(pdbID="1crn")
   output$nglShiny <- renderNglShiny(
-    nglShiny("hello shinyApp", 300, 300)
+    nglShiny(options, 300, 300)
     )
 
 } # server

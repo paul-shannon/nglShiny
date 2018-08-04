@@ -1,19 +1,13 @@
 #----------------------------------------------------------------------------------------------------
-nglShiny <- function(message, width = NULL, height = NULL, elementId = NULL)
+nglShiny <- function(options, width = NULL, height = NULL, elementId = NULL)
 {
   printf("--- ~/github/nglShiny/R/nglShiny ctor");
 
-
-  x <- list(
-    message = message
-    )
-
-  # create widget
-  printf("creating widget with sizingPolicy");
+  stopifnot("pdbID" %in% names(options))
 
   htmlwidgets::createWidget(
     name = 'nglShiny',
-    x,
+    options,
     width = width,
     height = height,
     # sizingPolicy = htmlwidgets::sizingPolicy(padding=0, browser.fill=TRUE),
