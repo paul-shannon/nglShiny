@@ -32,10 +32,22 @@ renderNglShiny <- function(expr, env = parent.frame(), quoted = FALSE)
 
 } # renderNglShiny
 #----------------------------------------------------------------------------------------------------
-fit <- function(session, padding=50)
+fit <- function(session)
 {
-   session$sendCustomMessage("fit", list(padding=padding))
+   session$sendCustomMessage("fit", list())
 
-} # fitSelected
+} # fit
+#----------------------------------------------------------------------------------------------------
+setRepresentation <- function(session, rep)
+{
+   session$sendCustomMessage("setRepresentation", list(rep))
+
+} # setRepresentation
+#----------------------------------------------------------------------------------------------------
+setColorScheme <- function(session, newColorScheme)
+{
+   session$sendCustomMessage("setRepresentation", list(newColorScheme))
+
+} # setColorScheme
 #----------------------------------------------------------------------------------------------------
 

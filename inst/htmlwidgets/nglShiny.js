@@ -34,3 +34,27 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("fit", function(message)
     })
 
 //------------------------------------------------------------------------------------------------------------------------
+if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("removeAllRepresentations", function(message){
+
+    stage.getComponentsByName('1crn').list[0].removeAllRepresentations()
+    })
+
+//------------------------------------------------------------------------------------------------------------------------
+if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setRepresentation", function(message){
+
+    console.log("nglShiny setRepresentation")
+    var rep = message;
+    stage.getComponentsByName('1crn').addRepresentation(rep)
+    })
+
+//------------------------------------------------------------------------------------------------------------------------
+if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setColorScheme", function(message){
+
+    console.log("nglShiny setColorScheme")
+    var newScheme = message[0];
+    console.log("new scheme: " + newScheme);
+    // debugger;
+    stage.getComponentsByName('1crn').addRepresentation("cartoon", {colorScheme: newScheme})
+    })
+
+//------------------------------------------------------------------------------------------------------------------------
