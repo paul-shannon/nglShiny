@@ -30,6 +30,12 @@ renderNglShiny <- function(expr, env = parent.frame(), quoted = FALSE)
 
   htmlwidgets::shinyRenderWidget(expr, nglShinyOutput, env, quoted = TRUE)
 
-}
+} # renderNglShiny
+#----------------------------------------------------------------------------------------------------
+fit <- function(session, padding=50)
+{
+   session$sendCustomMessage("fit", list(padding=padding))
+
+} # fitSelected
 #----------------------------------------------------------------------------------------------------
 

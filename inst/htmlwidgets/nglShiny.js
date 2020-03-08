@@ -26,3 +26,11 @@ HTMLWidgets.widget({
     } // return
   } // factory
 });  // widget
+//------------------------------------------------------------------------------------------------------------------------
+if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("fit", function(message){
+
+    console.log("nglShiny fit")
+    stage.autoView()
+    })
+
+//------------------------------------------------------------------------------------------------------------------------
