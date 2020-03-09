@@ -1,3 +1,8 @@
+// shameful use of primitive global variables for now
+window.pdbID = "1crn";
+window.representation = "cartoon";
+window.colorScheme = "residueIndex";
+//------------------------------------------------------------------------------------------------------------------------
 HTMLWidgets.widget({
 
   name: 'nglShiny',
@@ -13,8 +18,8 @@ HTMLWidgets.widget({
           stage = new NGL.Stage(el);
           window.stage = stage;
           uri = "rcsb://" + options.pdbID;
+          window.pdbID = options.pdbID;
           stage.loadFile(uri, {defaultRepresentation: true});
-          //stage.loadFile("rcsb://1pcr", {defaultRepresentation: true});
           },
        resize: function(width, height) {
           console.log("entering resize");
@@ -36,7 +41,7 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("fit", function(message)
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("removeAllRepresentations", function(message){
 
-    stage.getComponentsByName('1crn').list[0].removeAllRepresentations()
+    stage.getComponentsByName(window.pdbID).list[0].removeAllRepresentations()
     })
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -44,7 +49,8 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setRepresentation", fun
 
     console.log("nglShiny setRepresentation")
     var rep = message;
-    stage.getComponentsByName('1crn').addRepresentation(rep)
+    window.representation = rep;
+    stage.getComponentsByName(window.pdbID).addRepresentation(rep)
     })
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -52,9 +58,25 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setColorScheme", functi
 
     console.log("nglShiny setColorScheme")
     var newScheme = message[0];
+    window.colorScheme = newScheme;
     console.log("new scheme: " + newScheme);
     // debugger;
-    stage.getComponentsByName('1crn').addRepresentation("cartoon", {colorScheme: newScheme})
+    stage.getComponentsByName(window.pdbID).addRepresentation(window.representation, {colorScheme: newScheme})
+    })
+
+//------------------------------------------------------------------------------------------------------------------------
+if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setPDB", function(message){
+
+    stage.removeAllComponents()
+    window.pdbID = message[0];
+    console.log("nglShiny setPDB: " + window.pdbID)
+    var url = "rcsb://" + window.pdbID;
+    stage.loadFile(url).then(function(comp){
+      comp.addRepresentation("cartoon", {colorScheme: "residueIndex"});
+      })
+       // redundant?
+    stage.getComponentsByName(window.pdbID).addRepresentation(window.representation, {colorScheme: window.colorScheme})
+    stage.autoView()
     })
 
 //------------------------------------------------------------------------------------------------------------------------
