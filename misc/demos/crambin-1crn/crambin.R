@@ -32,12 +32,11 @@ ui = shinyUI(fluidPage(
         selectInput("representationSelector", "", nglRepresentations, selected=defaultRepresentation),
         selectInput("colorSchemeSelector", "", nglColorSchemes, selected=defaultColorScheme),
         hr(),
-        checkboxGroupInput("domainChooser", "Protein Domain",
+        radioButtons("domainChooser", "Domain",
                      c("helix 1" = "helix001",
                        "helix 2" = "helix002",
                        "sheet 1" = "sheet001",
-                       "sheet 2" = "sheet002"),
-                     selected=c("helix001", "helix002", "sheet001", "sheet002")
+                       "sheet 2" = "sheet002")
                      ),
         width=2
         ),
@@ -55,9 +54,17 @@ server = function(input, output, session) {
      })
 
   observeEvent(input$domainChooser, {
-     choices = input$domainChooser
-     printf("visible domains: %d", length(choices))
-     residue.string <- paste(23:30, collapse=", ")
+     chosenDomain = input$domainChooser
+     printf("domains choice: %s", chosenDomain)
+     residueRange <- switch(chosenDomain,
+                            "helix001" = 7:19,
+                            "helix002" = 23:30,
+                            "sheet001" = 1:4,
+                            "sheet002" = 32:35
+                            )
+
+     residue.string <- paste(residueRange, collapse=", ")
+     printf("%s: %s", chosenDomain, residue.string)
      session$sendCustomMessage(type="select", message=list(residue.string))
        # 327 atoms, 46 residues
        # HELIX    1  H1 ILE A    7  PRO A   19  13/10 CONFORMATION RES 17,19       13

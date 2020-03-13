@@ -84,7 +84,8 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("select", function(messa
 
     residueString = message[0];
     console.log("nglShiny select: " + residueString)
-    stage.getComponentsByName(window.pdbID).addRepresentation("ball+stick", {sele: "23, 24, 25, 26, 27, 28, 29, 30"})
+    stage.getComponentsByName(window.pdbID).addRepresentation("ball+stick", {sele: residueString})
+    //stage.getComponentsByName(window.pdbID).addRepresentation("ball+stick", {sele: "23, 24, 25, 26, 27, 28, 29, 30"})
     })
 
 //------------------------------------------------------------------------------------------------------------------------
