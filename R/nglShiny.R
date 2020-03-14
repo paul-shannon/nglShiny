@@ -44,6 +44,12 @@ setRepresentation <- function(session, rep)
 
 } # setRepresentation
 #----------------------------------------------------------------------------------------------------
+showSelection <- function(session, rep, selection)
+{
+   session$sendCustomMessage("showSelection", list(representation=rep, selection=selection))
+
+} # setRepresentation
+#----------------------------------------------------------------------------------------------------
 setColorScheme <- function(session, newColorScheme)
 {
    session$sendCustomMessage("setRepresentation", list(newColorScheme))
