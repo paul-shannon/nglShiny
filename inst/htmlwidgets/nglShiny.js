@@ -91,11 +91,12 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("select", function(messa
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("showSelection", function(message){
 
-    residueString = message[0];
+    //residueString = message[0];
     var rep = message.representation
     var selection = message.selection
+    var colorScheme = message.colorScheme
     console.log("nglShiny showSelection: " + rep + ",  " + selection);
-    stage.getComponentsByName(window.pdbID).addRepresentation(rep, {sele: selection})
+    stage.getComponentsByName(window.pdbID).addRepresentation(rep, {sele: selection, colorScheme: colorScheme})
     // stage.getComponentsByName('1ztu').addRepresentation('ball+stick', {sele: 'not helix and not sheet and not turn and not water'})
     })
 

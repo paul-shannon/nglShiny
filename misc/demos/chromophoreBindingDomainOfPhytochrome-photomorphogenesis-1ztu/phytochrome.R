@@ -11,6 +11,8 @@ library(htmlwidgets)
 #   Wagner, J.R., Brunzelle, J.S., Forest, K.T., Vierstra, R.D.
 #  (2005) Nature 438: 325-331
 
+# Genome of the Extremely Radiation-Resistant Bacterium Deinococcus radiodurans Viewed from the Perspective of Comparative Genomics
+# https://www.ncbi.nlm.nih.gov/pmc/articles/PMC99018/
 
 # Phytochromes are red/far-red light photoreceptors that direct photosensory responses across the bacterial, fungal and
 # plant kingdoms. These include photosynthetic potential and pigmentation in bacteria as well as chloroplast development
@@ -22,6 +24,29 @@ library(htmlwidgets)
 # solvent-shielded bilin-binding pocket, and reveals an unusually formed deep trefoil knot that stabilizes this
 # region. The structure provides the first three-dimensional glimpse into the photochromic behaviour of these
 # photoreceptors and helps to explain the evolution of higher plant phytochromes from prokaryotic precursors.
+
+# DrCBD: The first 321 residues of D. radiodurans bacteriophytochrome photo-receptor (DrBphP)
+# constitute the chromophore-binding domain (DrCBD) and provide a stable, soluble and spectrally
+# active fragment of phytochrome that is amenable to structural studies (Supplementary Fig. 1)
+# 5. Although DrCBD readily assembles with biliverdin to generate a protein with a normal Pr
+# spectrum4, its Pfr spectrum is substantially bleached, in accord with the need of a downstream PHY
+# domain to stabilize the Pfr conformer4,6,7.
+#
+#
+#
+
+# As predicted by PFAM8 and sequence alignments 1,4,6, two well-known domain folds were easily
+# identified in the DrCBD structure (Fig. 1). The PAS (Per/Arndt/Sim) domain encompasses residues 38
+# to 128 with a five-stranded antiparallel b-sheet (b2, b1, b5, b4 and b3) flanked on one side by
+# three a helices (a1–a3). Its concave front surface is possibly a protein–protein signalling
+# interface, on the basis of comparisons with other PAS domains bound to protein
+# partners. Following the PAS domain is a GAF (cGMP phosphodiesterase/adenyl cyclase/FhlA)
+# domain, confirmed biochemically to form most of the bilin-binding pocket1,4,6. This domain
+# contains a six-stranded anti-parallel b sheet (b9, b10, b11, b6, b7 and b8) sandwiched between a
+# three-helix bundle (a4, a5, a8) and a6 and a7. As in most members of the phytochrome superfamily,
+# the PAS domain of DrCBD is preceded by an  ~35-residue random-coil. Within the bacterial and fungal
+# phytochrome clades, this extension contains the cysteine that covalently binds the A ring of the
+# bilin chromophore4,11.
 
 #----------------------------------------------------------------------------------------------------
 nglRepresentations = c('angle', 'axes', 'ball+stick', 'backbone', 'base', 'cartoon', 'contact',
@@ -51,7 +76,11 @@ ui = shinyUI(fluidPage(
         actionButton("fitButton", "Fit"),
         actionButton("defaultViewButton", "Defaults"),
         actionButton("clearRepresentationsButton", "Clear Representations"),
-        actionButton("showChromaphoreButton", "Chromaphore Only"),
+        actionButton("showChromaphoreButton", "Chromaphore"),
+        actionButton("showChromaphoreAttachmentSiteButton", "Chromaphore Attachment"),
+        actionButton("showCBDButton", "CBD"),
+        actionButton("showCBD.PAS.Button", "CBD PAS Domain"),
+        actionButton("showCBD.GAF.Button", "CBD GAF Domain"),
         selectInput("pdbSelector", "", pdbIDs, selected=defaultPdbID),
         selectInput("representationSelector", "", nglRepresentations, selected=defaultRepresentation),
         selectInput("colorSchemeSelector", "", nglColorSchemes, selected=defaultColorScheme),
@@ -111,6 +140,50 @@ server = function(input, output, session) {
      session$sendCustomMessage(type="showSelection", message=list(representation=repString,
                                                                     selection=selectionString))
      })
+
+   observeEvent(input$showChromaphoreAttachmentSiteButton, {
+     repString <- "ball+stick"
+     selectionString <- "24"
+     session$sendCustomMessage(type="showSelection", message=list(representation=repString,
+                                                                  selection=selectionString))
+     })
+
+
+   observeEvent(input$showChromaphoreButton, {
+     repString <- "ball+stick"
+     selectionString <- "not helix and not sheet and not turn and not water"
+     session$sendCustomMessage(type="showSelection", message=list(representation=repString,
+                                                                    selection=selectionString))
+     })
+
+   observeEvent(input$showCBDButton, {
+     repString <- "cartoon"
+     selectionString <- "1-321"
+     colorScheme = "residueIndex"
+     session$sendCustomMessage(type="showSelection", message=list(representation=repString,
+                                                                  selection=selectionString,
+                                                                  colorScheme=colorScheme))
+     })
+
+
+   observeEvent(input$showCBD.PAS.Button, {
+     repString <- "cartoon"
+     selectionString <- "38-128"
+     colorScheme = "residueIndex"
+     session$sendCustomMessage(type="showSelection", message=list(representation=repString,
+                                                                  selection=selectionString,
+                                                                  colorScheme=colorScheme))
+     })
+
+  observeEvent(input$showCBD.GAF.Button, {
+     repString <- "cartoon"
+     selectionString <- "129-321"
+     colorScheme = "residueIndex"
+     session$sendCustomMessage(type="showSelection", message=list(representation=repString,
+                                                                  selection=selectionString,
+                                                                  colorScheme=colorScheme))
+     })
+
 
 
   observeEvent(input$clearRepresentationsButton, {
