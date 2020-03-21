@@ -103,7 +103,8 @@ ui = shinyUI(fluidPage(
 server = function(input, output, session) {
 
   observeEvent(input$fitButton, {
-     session$sendCustomMessage(type="fit", message=list())
+     fit(session)
+     #session$sendCustomMessage(type="fit", message=list())
      })
 
   observeEvent(input$domainChooser, {
@@ -137,8 +138,10 @@ server = function(input, output, session) {
    observeEvent(input$showChromaphoreButton, {
      repString <- "ball+stick"
      selectionString <- "not helix and not sheet and not turn and not water"
-     session$sendCustomMessage(type="showSelection", message=list(representation=repString,
-                                                                    selection=selectionString))
+     printf("calling showSelection on nglShiny object")
+     showSelection(session, repString, selectionString)
+     #session$sendCustomMessage(type="showSelection", message=list(representation=repString,
+     #                                                               selection=selectionString))
      })
 
    observeEvent(input$showChromaphoreAttachmentSiteButton, {
