@@ -67,7 +67,7 @@ pdbIDs <- c(defaultPdbID,
 ui = shinyUI(fluidPage(
 
   tags$head(
-    tags$style("#nglShiny{height:98vh !important;}"),
+    tags$style("#nglShiny{height:90vh !important;}"),
     tags$link(rel="icon", href="data:;base64,iVBORw0KGgo=")
     ),
 
@@ -94,7 +94,10 @@ ui = shinyUI(fluidPage(
         width=2
         ),
      mainPanel(
-        nglShinyOutput('nglShiny'),
+       tabsetPanel(type = "tabs",
+                  tabPanel("1ztu",  nglShinyOutput('nglShiny')),
+                  tabPanel("Notes", includeHTML("1ztu.html"))
+                  ),
         width=10
         )
      ) # sidebarLayout
