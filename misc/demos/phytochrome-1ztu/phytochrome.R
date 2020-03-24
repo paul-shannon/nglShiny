@@ -96,7 +96,8 @@ ui = shinyUI(fluidPage(
      mainPanel(
        tabsetPanel(type = "tabs",
                   tabPanel("1ztu",  nglShinyOutput('nglShiny')),
-                  tabPanel("Notes", includeHTML("1ztu.html"))
+                  tabPanel("Notes", includeHTML("1ztu.html")),
+                  tabPanel("chromaphore", includeHTML("chromaphore.html"))
                   ),
         width=10
         )
@@ -232,5 +233,6 @@ server = function(input, output, session) {
 
 } # server
 #----------------------------------------------------------------------------------------------------
-app <- shinyApp(ui=ui, server=server)
+runApp(shinyApp(ui=ui, server=server), port=9000)
+
 
