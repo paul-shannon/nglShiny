@@ -64,6 +64,7 @@ pdbIDs <- c(defaultPdbID,
 #----------------------------------------------------------------------------------------------------
 # 1RQK, 3I4D: Photosynthetic reaction center from rhodobacter sphaeroides 2.4.1
 # crambin, 1crn: https://bmcbiophys.biomedcentral.com/articles/10.1186/s13628-014-0008-0
+addResourcePath("www", "www");
 ui = shinyUI(fluidPage(
 
   tags$head(
