@@ -1,2 +1,2 @@
 default:
-	R -f phytochrome.R
+	R -f 1ztu.R
