@@ -19,11 +19,25 @@ HTMLWidgets.widget({
           window.stage = stage;
           uri = "rcsb://" + options.pdbID;
           window.pdbID = options.pdbID;
-          stage.loadFile(uri, {defaultRepresentation: true});
+          stage.loadFile(uri, {defaultRepresentation: false}).then(function(o){
+	      o.autoView()
+	      o.addRepresentation('ball+stick', {
+		  sele: 'not helix and not sheet and not turn and not water',
+		  name: 'chromaphore'
+                  })
+	      o.addRepresentation('cartoon', {
+		  name: 'pas',
+		  sele: '38-128',
+                  })
+	      o.addRepresentation('tube', {
+		  name: 'gaf',
+		  sele: '129-321',
+                  })
+              }) // then 
           },
        resize: function(width, height) {
           console.log("entering resize");
-           correctedHeight = window.innerHeight * 0.9;
+          correctedHeight = window.innerHeight * 0.9;
           $("#nglShiny").height(correctedHeight);
           console.log("nglShiny.resize: " + width + ", " + correctedHeight + ": " + height);
           stage.handleResize()
@@ -31,6 +45,28 @@ HTMLWidgets.widget({
     } // return
   } // factory
 });  // widget
+//------------------------------------------------------------------------------------------------------------------------
+function setComponentNames(x, namedComponents)
+{
+   console.log("--- setComponentNames");
+   console.log(namedComponents);
+
+    // stage.getComponentsByName(window.pdbID).list[0].removeAllRepresentations()
+
+   for(name in namedComponents){
+     attributes = namedComponents[name];
+     var rep = attributes.representation;
+     var selectionString = attributes.selection;
+     console.log("name '" + name + "' for '" + selectionString + "' rep: " + rep)
+     debugger;
+     //stage.getComponentsByName(window.pdbID).addRepresentation(rep, {sele: selectionString,
+     //								     name: name})
+     } // for name
+   
+   //component.addRepresentation('ball+stick', {name: 'ligand', sele: 'ligand'})
+   //stage.getComponentsByName(window.pdbID).addRepresentation(rep, attributes);
+
+} // setComponentNames
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("fit", function(message){
 
@@ -92,12 +128,26 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("select", function(messa
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("showSelection", function(message){
 
     //residueString = message[0];
-    var rep = message.representation
-    var selection = message.selection
-    var colorScheme = message.colorScheme
+    var rep = message.representation;
+    var selection = message.selection;
+    var colorScheme = message.colorScheme;
+    var name = message.name;
+    var attributes = {sele: selection, colorScheme: colorScheme, name: name};
+    console.log("attributes")
+    console.log(attributes)
     console.log("nglShiny showSelection: " + rep + ",  " + selection);
-    stage.getComponentsByName(window.pdbID).addRepresentation(rep, {sele: selection, colorScheme: colorScheme})
+    //stage.getComponentsByName(window.pdbID).addRepresentation(rep, {sele: selection, colorScheme: colorScheme, name: name})
+    stage.getComponentsByName(window.pdbID).addRepresentation(rep, attributes);
     // stage.getComponentsByName('1ztu').addRepresentation('ball+stick', {sele: 'not helix and not sheet and not turn and not water'})
+    })
+
+//------------------------------------------------------------------------------------------------------------------------
+if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setVisibility", function(message){
+
+    var repName = message.representationName;
+    var newState = message.newState;
+    console.log("set visibility " + repName + "  " + newState)
+    stage.getRepresentationsByName(repName).setVisibility(newState)
     })
 
 //------------------------------------------------------------------------------------------------------------------------

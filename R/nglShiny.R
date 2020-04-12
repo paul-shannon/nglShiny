@@ -125,6 +125,7 @@ setRepresentation <- function(session, rep)
 #' @param representation todo
 #' @param selection todo
 #' @param colorScheme todo
+#' @param name character string, used for subsequent show/hide
 #'
 #' @examples
 #' \dontrun{
@@ -136,14 +137,38 @@ setRepresentation <- function(session, rep)
 #'
 #' @export
 #'
-showSelection <- function(session, representation, selection, colorScheme="residueIndex")
+showSelection <- function(session, representation, selection, name, colorScheme="residueIndex")
 {
     session$sendCustomMessage("showSelection",
                               list(representation=representation,
                                    selection=selection,
-                                   colorScheme=colorScheme))
+                                   colorScheme=colorScheme,
+                                   name=name))
 
-} # setRepresentation
+} # showSelection
+#----------------------------------------------------------------------------------------------------
+#' hide or show the named selection
+#'
+#' @param session a Shiny server session object.
+#' @param representationName a previously assigned character string
+#'
+#' @examples
+#' \dontrun{
+#'   setVisibility(session, "chromaphore", FALSE)
+#'}
+#'
+#' @aliases setVisibility
+#' @rdname setVisibility
+#'
+#' @export
+#'
+setVisibility <- function(session, representationName, newVisibilityState)
+{
+    session$sendCustomMessage("setVisibility",
+                              list(representationName=representationName,
+                                   newState=newVisibilityState))
+
+} # setVisibility
 #----------------------------------------------------------------------------------------------------
 setColorScheme <- function(session, newColorScheme)
 {

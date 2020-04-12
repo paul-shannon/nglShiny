@@ -4,7 +4,13 @@
 \alias{showSelection}
 \title{Using the specified representation and colorScheme, display the portion of selection}
 \usage{
-showSelection(session, representation, selection, colorScheme = "residueIndex")
+showSelection(
+  session,
+  representation,
+  selection,
+  name,
+  colorScheme = "residueIndex"
+)
 }
 \arguments{
 \item{session}{a Shiny server session object.}
@@ -12,6 +18,8 @@ showSelection(session, representation, selection, colorScheme = "residueIndex")
 \item{representation}{todo}
 
 \item{selection}{todo}
+
+\item{name}{character string, used for subsequent show/hide}
 
 \item{colorScheme}{todo}
 }

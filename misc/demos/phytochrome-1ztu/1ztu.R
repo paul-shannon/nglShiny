@@ -109,12 +109,12 @@ ui = shinyUI(fluidPage(
 #----------------------------------------------------------------------------------------------------
 server = function(input, output, session) {
 
-  observeEvent(input$fitButton, {
+  observeEvent(input$fitButton, ignoreInit=TRUE, {
      fit(session)
      #session$sendCustomMessage(type="fit", message=list())
      })
 
-  observeEvent(input$domainChooser, {
+  observeEvent(input$domainChooser, ignoreInit=TRUE, {
      chosenDomain = input$domainChooser
      printf("domains choice: %s", chosenDomain)
      residueRange <- switch(chosenDomain,
@@ -134,7 +134,7 @@ server = function(input, output, session) {
        # SHEET    2  S1 2 CYS A  32  ILE A  35 -1
      })
 
-  observeEvent(input$defaultViewButton, {
+  observeEvent(input$defaultViewButton, ignoreInit=TRUE, {
      session$sendCustomMessage(type="removeAllRepresentations", message=list())
      session$sendCustomMessage(type="setRepresentation", message=list(defaultRepresentation))
      session$sendCustomMessage(type="setColorScheme", message=list(defaultColorScheme))
@@ -142,81 +142,88 @@ server = function(input, output, session) {
      })
 
 
-   observeEvent(input$showChromaphoreButton, {
-     repString <- "ball+stick"
-     selectionString <- "not helix and not sheet and not turn and not water"
-     printf("calling showSelection on nglShiny object")
-     showSelection(session, repString, selectionString)
-     #session$sendCustomMessage(type="showSelection", message=list(representation=repString,
-     #                                                               selection=selectionString))
-     })
+   #observeEvent(input$showChromaphoreButton, {
+   #  repString <- "ball+stick"
+   #  selectionString <- "not helix and not sheet and not turn and not water"
+   #  printf("calling showSelection on nglShiny object")
+   #  showSelection(session, repString, selectionString, name="chromaphore")
+   #  #session$sendCustomMessage(type="showSelection", message=list(representation=repString,
+   #  #                                                               selection=selectionString))
+   #  })
 
-   observeEvent(input$showChromaphoreAttachmentSiteButton, {
+   observeEvent(input$showChromaphoreAttachmentSiteButton, ignoreInit=TRUE, {
      repString <- "ball+stick"
      selectionString <- "24"
      session$sendCustomMessage(type="showSelection", message=list(representation=repString,
-                                                                  selection=selectionString))
+                                                                  selection=selectionString,
+                                                                  name="chromaphoreAttachment"))
      })
 
 
-   observeEvent(input$showChromaphoreButton, {
-     repString <- "ball+stick"
-     selectionString <- "not helix and not sheet and not turn and not water"
-     session$sendCustomMessage(type="showSelection", message=list(representation=repString,
-                                                                    selection=selectionString))
+   observeEvent(input$showChromaphoreButton, ignoreInit=TRUE, {
+       setVisibility(session, "chromaphore", TRUE)
+       #session$sendCustomMessage(type="setVisibility",
+       #                          message=list(representationName: "chromaphore",
+       #                                       newState: TRUE))
+     #repString <- "ball+stick"
+     #selectionString <- "not helix and not sheet and not turn and not water"
+     #session$sendCustomMessage(type="showSelection", message=list(representation=repString,
+     #                                                             selection=selectionString,
+     #                                                             name="chromaphore"))
      })
 
-   observeEvent(input$showCBDButton, {
+   observeEvent(input$showCBDButton, ignoreInit=TRUE, {
      repString <- "cartoon"
      selectionString <- "1-321"
      colorScheme = "residueIndex"
      session$sendCustomMessage(type="showSelection", message=list(representation=repString,
                                                                   selection=selectionString,
-                                                                  colorScheme=colorScheme))
+                                                                  colorScheme=colorScheme,
+                                                                  name="CBD"))
      })
 
 
-   observeEvent(input$showCBD.PAS.Button, {
+   observeEvent(input$showCBD.PAS.Button, ignoreInit=TRUE, {
      repString <- "cartoon"
      selectionString <- "38-128"
      colorScheme = "residueIndex"
      session$sendCustomMessage(type="showSelection", message=list(representation=repString,
                                                                   selection=selectionString,
-                                                                  colorScheme=colorScheme))
+                                                                  colorScheme=colorScheme,
+                                                                  name="PAS"))
      })
 
-  observeEvent(input$showCBD.GAF.Button, {
+  observeEvent(input$showCBD.GAF.Button, ignoreInit=TRUE, {
      repString <- "cartoon"
      selectionString <- "129-321"
      colorScheme = "residueIndex"
      session$sendCustomMessage(type="showSelection", message=list(representation=repString,
                                                                   selection=selectionString,
-                                                                  colorScheme=colorScheme))
+                                                                  colorScheme=colorScheme,
+                                                                  name="GAF"))
      })
 
-
-
-  observeEvent(input$clearRepresentationsButton, {
+  observeEvent(input$clearRepresentationsButton, ignoreInit=TRUE, {
       session$sendCustomMessage(type="removeAllRepresentations", message=list())
       #updateSelectInput(session, "representationSelector", label=NULL, choices=NULL,  selected=defaultRepresentation)
       #updateSelectInput(session, "colorSchemeSelector", label=NULL, choices=NULL,  selected=defaultColorScheme)
       })
 
-  observeEvent(input$pdbSelector, {
+  observeEvent(input$pdbSelector, ignoreInit=TRUE, {
      choice = input$pdbSelector
      printf("pdb: %s", choice)
      session$sendCustomMessage(type="setPDB", message=list(choice))
      updateSelectInput(session, "pdbSelector", label=NULL, choices=NULL,  selected=choice)
      })
 
-  observeEvent(input$representationSelector, {
+  observeEvent(input$representationSelector, ignoreInit=TRUE, {
      choice = input$representationSelector;
      printf("rep: %s", choice)
      session$sendCustomMessage(type="setRepresentation", message=list(choice))
      updateSelectInput(session, "representationSelector", label=NULL, choices=NULL,  selected=choice)
      })
 
-  observeEvent(input$colorSchemeSelector, {
+  observeEvent(input$colorSchemeSelector, ignoreInit=TRUE, {
      choice = input$colorSchemeSelector;
      printf("colorScheme: %s", choice)
      session$sendCustomMessage(type="setColorScheme", message=list(choice))
@@ -225,10 +232,17 @@ server = function(input, output, session) {
 
   output$value <- renderPrint({ input$action})
 
-  #options <- list(pdbID="1pcr")
-  #options <- list(pdbID="3kvk")
-  options <- list(pdbID=defaultPdbID);
-  #options <- list(pdbID="1rqk")
+    components=list(chromaphore=
+                        list(selection="not helix and not sheet and not turn and not water",
+                             representation="ball+stick"),
+                    pas=list(selection="38-128",
+                             representation="cartoon"),
+                    gaf=list(selection="129-321",
+                             representation="cartoon"))
+
+  options <- list(pdbID=defaultPdbID,
+                  namedComponents=components)
+
 
   output$nglShiny <- renderNglShiny(
     nglShiny(options, 300, 300)
