@@ -49,6 +49,11 @@ library(htmlwidgets)
 # bilin chromophore4,11.
 
 #----------------------------------------------------------------------------------------------------
+components=list(chromaphore=list(selection="not helix and not sheet and not turn and not water",
+                                   representation="ball+stick", visible=TRUE),
+                pas=list(selection="38-128", representation="cartoon", visible=TRUE),
+                gaf=list(selection="129-321", representation="cartoon", visible=TRUE))
+
 nglRepresentations = c('angle', 'axes', 'ball+stick', 'backbone', 'base', 'cartoon', 'contact',
                        'dihedral', 'distance', 'helixorient', 'licorice', 'hyperball', 'label',
                        'line', 'surface', 'point', 'ribbon', 'rocket', 'rope', 'spacefill', 'trace', 'unitcell',
@@ -77,11 +82,11 @@ ui = shinyUI(fluidPage(
         actionButton("fitButton", "Fit"),
         actionButton("defaultViewButton", "Defaults"),
         actionButton("clearRepresentationsButton", "Clear Representations"),
-        actionButton("showChromaphoreButton", "Chromaphore"),
+        actionButton("toggleChromaphoreVisibilityButton", "Chromaphore"),
+        actionButton("togglePASdomainVisibilityButton", "PAS"),
+        actionButton("toggleGAFdomainVisibilityButton", "GAF"),
         actionButton("showChromaphoreAttachmentSiteButton", "Chromaphore Attachment"),
         actionButton("showCBDButton", "CBD"),
-        actionButton("showCBD.PAS.Button", "CBD PAS Domain"),
-        actionButton("showCBD.GAF.Button", "CBD GAF Domain"),
         selectInput("pdbSelector", "", pdbIDs, selected=defaultPdbID),
         selectInput("representationSelector", "", nglRepresentations, selected=defaultRepresentation),
         selectInput("colorSchemeSelector", "", nglColorSchemes, selected=defaultColorScheme),
@@ -159,17 +164,22 @@ server = function(input, output, session) {
                                                                   name="chromaphoreAttachment"))
      })
 
+   observeEvent(input$toggleChromaphoreVisibilityButton, ignoreInit=TRUE, {
+     newState <- !components$chromaphore$visible
+     components$chromaphore$visible <<- newState
+     setVisibility(session, "chromaphore", newState)
+     })
 
-   observeEvent(input$showChromaphoreButton, ignoreInit=TRUE, {
-       setVisibility(session, "chromaphore", TRUE)
-       #session$sendCustomMessage(type="setVisibility",
-       #                          message=list(representationName: "chromaphore",
-       #                                       newState: TRUE))
-     #repString <- "ball+stick"
-     #selectionString <- "not helix and not sheet and not turn and not water"
-     #session$sendCustomMessage(type="showSelection", message=list(representation=repString,
-     #                                                             selection=selectionString,
-     #                                                             name="chromaphore"))
+   observeEvent(input$togglePASdomainVisibilityButton, ignoreInit=TRUE, {
+     newState <- !components$pas$visible
+     components$pas$visible <<- newState
+     setVisibility(session, "pas", newState)
+     })
+
+   observeEvent(input$toggleGAFdomainVisibilityButton, ignoreInit=TRUE, {
+     newState <- !components$gaf$visible
+     components$gaf$visible <<- newState
+     setVisibility(session, "gaf", newState)
      })
 
    observeEvent(input$showCBDButton, ignoreInit=TRUE, {
@@ -230,19 +240,9 @@ server = function(input, output, session) {
      updateSelectInput(session, "colorSchemeSelector", label=NULL, choices=NULL,  selected=choice)
      })
 
-  output$value <- renderPrint({ input$action})
+  output$value <- renderPrint({input$action})
 
-    components=list(chromaphore=
-                        list(selection="not helix and not sheet and not turn and not water",
-                             representation="ball+stick"),
-                    pas=list(selection="38-128",
-                             representation="cartoon"),
-                    gaf=list(selection="129-321",
-                             representation="cartoon"))
-
-  options <- list(pdbID=defaultPdbID,
-                  namedComponents=components)
-
+  options <- list(pdbID=defaultPdbID, namedComponents=components)
 
   output$nglShiny <- renderNglShiny(
     nglShiny(options, 300, 300)

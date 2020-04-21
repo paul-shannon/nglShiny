@@ -21,6 +21,7 @@ HTMLWidgets.widget({
           window.pdbID = options.pdbID;
           stage.loadFile(uri, {defaultRepresentation: false}).then(function(o){
 	      o.autoView()
+              console.log("adding rep for 'chromaphore'");
 	      o.addRepresentation('ball+stick', {
 		  sele: 'not helix and not sheet and not turn and not water',
 		  name: 'chromaphore'
