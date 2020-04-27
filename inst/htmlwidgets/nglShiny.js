@@ -134,6 +134,19 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setPDB", function(messa
     //stage.autoView()
     })
 
+if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setLocalPDB", function(message){
+    // Add PBDs from local sources, convert pdb file into a single long string in R and send it as message
+    if(typeof(stage) != "undefined")
+       stage.removeAllComponents()
+
+    var uri = message[0] // Noticed that the structure is changed but will otherwise keep it with what I know works
+    var stringBlob = new Blob( [ uri ], { type: 'text/plain'} );
+    console.log("nglShiny setPDB:");
+    stage.loadFile(stringBlob, {ext: "pdb", defaultRepresentation: true}).then(function (o) {
+      o.auto.View()
+    });
+});
+
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("select", function(message){
 
