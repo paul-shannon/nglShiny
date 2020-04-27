@@ -89,7 +89,8 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("fit", function(message)
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("removeAllRepresentations", function(message){
 
-    stage.getComponentsByName(window.pdbID).list[0].removeAllRepresentations()
+   if(typeof(stage) != "undefined")
+      stage.getComponentsByName(window.pdbID).list[0].removeAllRepresentations()
     })
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -115,16 +116,22 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setColorScheme", functi
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setPDB", function(message){
 
-    stage.removeAllComponents()
-    window.pdbID = message[0];
-    console.log("nglShiny setPDB: " + window.pdbID)
-    var url = "rcsb://" + window.pdbID;
-    stage.loadFile(url).then(function(comp){
-      comp.addRepresentation("cartoon", {colorScheme: "residueIndex"});
-      })
-       // redundant?
-    stage.getComponentsByName(window.pdbID).addRepresentation(window.representation, {colorScheme: window.colorScheme})
-    stage.autoView()
+   //debugger;
+
+   if(typeof(stage) != "undefined")
+      stage.removeAllComponents()
+
+    var uri = message.uri;
+    console.log(" about to loadFile: " + uri);
+    stage.loadFile(uri, {ext: "pdb", defaultRepresentation: true}).then(function(o){
+        o.autoView()
+        stage.autoView()
+        })
+    //stage.loadFile(uri).then(function(comp){
+    //  comp.addRepresentation("cartoon", {colorScheme: "residueIndex"});
+    //  })
+    //stage.getComponentsByName(window.pdbID).addRepresentation(window.representation, {colorScheme: window.colorScheme})
+    //stage.autoView()
     })
 
 //------------------------------------------------------------------------------------------------------------------------

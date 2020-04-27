@@ -15,6 +15,8 @@ pdbIDs <- c(defaultPdbID,
             "2UWS",  # photosynthetic reaction center from Rb. sphaeroides, pH 6.5, charge-separated state
             "1IZL")  # Crystal structure of oxygen-evolving photosystem II from Thermosynechococcus vulcanus at 3.7-A resolution
 #----------------------------------------------------------------------------------------------------
+addResourcePath("www", "www");
+
 ui = shinyUI(fluidPage(
 
   tags$head(
@@ -25,23 +27,9 @@ ui = shinyUI(fluidPage(
   sidebarLayout(
      sidebarPanel(
         actionButton("fitButton", "Fit"),
-        actionButton("defaultViewButton", "Defaults"),
-        actionButton("clearRepresentationsButton", "Clear Representations"),
-        actionButton("toggleChromaphoreVisibilityButton", "Chromaphore"),
-        actionButton("togglePASdomainVisibilityButton", "PAS"),
-        actionButton("toggleGAFdomainVisibilityButton", "GAF"),
-        actionButton("showChromaphoreAttachmentSiteButton", "Chromaphore Attachment"),
-        actionButton("showCBDButton", "CBD"),
-        selectInput("pdbSelector", "", pdbIDs, selected=defaultPdbID),
-        selectInput("representationSelector", "", nglRepresentations, selected=defaultRepresentation),
-        selectInput("colorSchemeSelector", "", nglColorSchemes, selected=defaultColorScheme),
-        hr(),
-        radioButtons("domainChooser", "Domain",
-                     c("helix 1" = "helix001",
-                       "helix 2" = "helix002",
-                       "sheet 1" = "sheet001",
-                       "sheet 2" = "sheet002")
-                     ),
+        actionButton("rcsbLoadButton", "rcsb://1ztu"),
+        actionButton("fileLoadButton", "file://1crn (not working yet)"),
+        actionButton("httpLoadButton", "http://2LE3"),
         width=2
         ),
      mainPanel(
@@ -55,7 +43,29 @@ server = function(input, output, session) {
 
   observeEvent(input$fitButton, ignoreInit=TRUE, {
      fit(session)
-     #session$sendCustomMessage(type="fit", message=list())
+     })
+
+  observeEvent(input$rcsbLoadButton, ignoreInit=TRUE, {
+     session$sendCustomMessage(type="removeAllRepresentations", message=list())
+     session$sendCustomMessage(type="setPDB", message=list(uri="rcsb://1ztu"))
+     fit(session)
+     })
+
+  observeEvent(input$fileLoadButton, ignoreInit=TRUE, {
+     session$sendCustomMessage(type="removeAllRepresentations", message=list())
+     session$sendCustomMessage(type="setPDB", message=list(uri="file://1crn.pdb"))
+     fit(session)
+     })
+
+  observeEvent(input$httpLoadButton, ignoreInit=TRUE, {
+     session$sendCustomMessage(type="removeAllRepresentations", message=list())
+     session$sendCustomMessage(type="setPDB",
+                               message=list(uri="https://files.rcsb.org/download/2LE3.pdb"))
+     fit(session)
+     })
+
+  observeEvent(input$fitButton, ignoreInit=TRUE, {
+     fit(session)
      })
 
   observeEvent(input$domainChooser, ignoreInit=TRUE, {

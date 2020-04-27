@@ -114,7 +114,7 @@ ui = shinyUI(fluidPage(
      mainPanel(
        tabsetPanel(type = "tabs",
                    tabPanel("1ztu",  nglShinyOutput('nglShiny')),
-                   tabPanel("Notes", includeHTML("1ztu.html")),
+                   tabPanel("Notes", includeHTML("1ztu-notes.html")),
                    tabPanel("Chromaphore", includeHTML("chromaphore.html")),
                    tabPanel("Terms", includeHTML("terms.html")),
                    tabPanel("Papers", includeHTML("papers.html"))
