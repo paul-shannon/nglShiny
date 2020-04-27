@@ -49,10 +49,22 @@ library(htmlwidgets)
 # bilin chromophore4,11.
 
 #----------------------------------------------------------------------------------------------------
-components=list(chromaphore=list(selection="not helix and not sheet and not turn and not water",
-                                   representation="ball+stick", visible=TRUE),
-                pas=list(selection="38-128", representation="cartoon", visible=TRUE),
-                gaf=list(selection="129-321", representation="cartoon", visible=TRUE))
+components=list(chromaphore=
+                    list(name="chromaphore",
+                         selection="not helix and not sheet and not turn and not water",
+                         representation="ball+stick",
+                         colorScheme="element",
+                         visible=TRUE),
+                pas=list(name="pas",
+                     selection="38-128",
+                     representation="cartoon",
+                     colorScheme="residueIndex",
+                     visible=TRUE),
+                gaf=list(name="gaf",
+                     selection="129-321",
+                     representation="cartoon",
+                     colorScheme="residueIndex",
+                     visible=TRUE))
 
 nglRepresentations = c('angle', 'axes', 'ball+stick', 'backbone', 'base', 'cartoon', 'contact',
                        'dihedral', 'distance', 'helixorient', 'licorice', 'hyperball', 'label',

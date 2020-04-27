@@ -13,27 +13,38 @@ HTMLWidgets.widget({
     return {
        renderValue: function(options) {
           console.log("---- options");
-          console.log(options)
+          console.log(options);
+          window.options = options;	   
           var stage;
-          stage = new NGL.Stage(el);
+          stage = new NGL.Stage(el, {backgroundColor:'beige'});
           window.stage = stage;
           uri = "rcsb://" + options.pdbID;
           window.pdbID = options.pdbID;
           stage.loadFile(uri, {defaultRepresentation: false}).then(function(o){
 	      o.autoView()
-              console.log("adding rep for 'chromaphore'");
-	      o.addRepresentation('ball+stick', {
-		  sele: 'not helix and not sheet and not turn and not water',
-		  name: 'chromaphore'
-                  })
-	      o.addRepresentation('cartoon', {
-		  name: 'pas',
-		  sele: '38-128',
-                  })
-	      o.addRepresentation('tube', {
-		  name: 'gaf',
-		  sele: '129-321',
-                  })
+              if(Object.keys(options).indexOf("namedComponents") >= 0){
+                  var namedComponents = options.namedComponents;
+                  var componentNames = Object.keys(namedComponents);
+                  console.log("--- componentNames");
+                  console.log(componentNames);
+		  for (i=0; i < componentNames.length; i++){ 
+                     var name = componentNames[i];
+                     console.log("==== adding rep for " + name);
+                     component = namedComponents[name];
+                     var rep = component.representation;
+		     var selection = component.selection;
+		     var colorScheme = component.colorScheme;
+                     console.log("rep: " + rep);
+                     console.log("selection: " + selection);
+                     console.log("name: " + name);
+                     console.log("colorScheme: " + colorScheme);
+                     o.addRepresentation(rep, {
+                        sele: selection,
+			name: name,
+			colorScheme: colorScheme
+                        })
+                     } // for i
+                  } // if options.namedComponents
               }) // then 
           },
        resize: function(width, height) {
