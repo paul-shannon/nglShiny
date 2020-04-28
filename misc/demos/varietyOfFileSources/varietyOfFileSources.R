@@ -53,7 +53,11 @@ server = function(input, output, session) {
 
   observeEvent(input$fileLoadButton, ignoreInit=TRUE, {
      session$sendCustomMessage(type="removeAllRepresentations", message=list())
-     session$sendCustomMessage(type="setPDB", message=list(uri="file://1crn.pdb"))
+
+     # Parse file into long string
+     pdbStrings <- readLines('file://1crn')
+     pdbString <- paste0(pdbStrings, collapse='\n')
+     session$sendCustomMessage(type="setLocalPDB", message=list(pdbString))
      fit(session)
      })
 
