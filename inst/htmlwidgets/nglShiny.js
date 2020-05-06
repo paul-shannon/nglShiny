@@ -41,7 +41,8 @@ HTMLWidgets.widget({
                      o.addRepresentation(rep, {
                         sele: selection,
 			name: name,
-			colorScheme: colorScheme
+                        colorScheme: colorScheme,
+			visible: component.visible
                         })
                      } // for i
                   } // if options.namedComponents
