@@ -1,3 +1,5 @@
+printf <- function(...) print(noquote(sprintf(...)))
+
 #' @importFrom htmlwidgets createWidget shinyWidgetOutput shinyRenderWidget
 #' @import shiny
 #'
