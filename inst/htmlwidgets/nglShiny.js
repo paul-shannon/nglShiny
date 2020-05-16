@@ -22,7 +22,12 @@ HTMLWidgets.widget({
           window.pdbID = options.pdbID;
           stage.loadFile(uri, {defaultRepresentation: false}).then(function(o){
 	      o.autoView()
-              if(Object.keys(options).indexOf("namedComponents") >= 0){
+              var namedComponentsProvided = Object.keys(options).indexOf("namedComponents") >= 0;
+              if(!namedComponentsProvided){
+                 console.log("--- no namedComponentsProvided, using cartoon + residueIndex")
+                 o.addRepresentation("cartoon", {sele: "all", colorScheme: "residueIndex"});
+                 }
+              else{
                   var namedComponents = options.namedComponents;
                   var componentNames = Object.keys(namedComponents);
                   console.log("--- componentNames");
@@ -97,8 +102,8 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("removeAllRepresentation
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setRepresentation", function(message){
 
-    console.log("nglShiny setRepresentation")
     var rep = message;
+    console.log("nglShiny setRepresentation: " + rep)
     window.representation = rep;
     stage.getComponentsByName(window.pdbID).addRepresentation(rep)
     })
@@ -109,7 +114,7 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setColorScheme", functi
     console.log("nglShiny setColorScheme")
     var newScheme = message[0];
     window.colorScheme = newScheme;
-    console.log("new scheme: " + newScheme);
+    console.log("new color scheme: " + newScheme);
     // debugger;
     stage.getComponentsByName(window.pdbID).addRepresentation(window.representation, {colorScheme: newScheme})
     })
