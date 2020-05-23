@@ -4,10 +4,12 @@
 \alias{fit}
 \title{Set zoom and center so that the current model nicely fills the display.}
 \usage{
-fit(session)
+fit(session, htmlContainer)
 }
 \arguments{
 \item{session}{a Shiny server session object.}
+
+\item{htmlContainer}{a character string used to identify the nglShiny instance, the id of html element}
 }
 \description{
 Set zoom and center so that the current model nicely fills the display.

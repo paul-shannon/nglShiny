@@ -28,11 +28,12 @@ printf <- function(...) print(noquote(sprintf(...)))
 #'
 #' @return a reference to an htmlwidget.
 #'
-nglShiny <- function(options, width = NULL, height = NULL, elementId = NULL)
+nglShiny <- function(options, width = NULL, height = NULL, elementId)
 {
   printf("--- ~/github/nglShiny/R/nglShiny ctor");
 
   stopifnot("pdbID" %in% names(options))
+  stopifnot("htmlContainer" %in% names(options))
 
   htmlwidgets::createWidget(
     name = 'nglShiny',
@@ -97,6 +98,7 @@ renderNglShiny <- function(expr, env = parent.frame(), quoted = FALSE)
 #' Set zoom and center so that the current model nicely fills the display.
 #'
 #' @param session a Shiny server session object.
+#' @param htmlContainer a character string used to identify the nglShiny instance, the id of html element
 #'
 #' @examples
 #' \dontrun{
@@ -109,9 +111,9 @@ renderNglShiny <- function(expr, env = parent.frame(), quoted = FALSE)
 #'
 #' @export
 #'
-fit <- function(session)
+fit <- function(session, htmlContainer)
 {
-   session$sendCustomMessage("fit", list())
+   session$sendCustomMessage("fit", message=list(htmlContainer=htmlContainer))
 
 } # fit
 #----------------------------------------------------------------------------------------------------

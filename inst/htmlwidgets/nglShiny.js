@@ -1,4 +1,5 @@
 // shameful use of primitive global variables for now
+// widget tips https://deanattali.com/blog/htmlwidgets-tips/
 window.pdbID = "1crn";
 window.representation = "cartoon";
 window.colorScheme = "residueIndex";
@@ -7,19 +8,35 @@ HTMLWidgets.widget({
 
   name: 'nglShiny',
   type: 'output',
+      
 
   factory: function(el, width, height) {
-    console.log("manufacturing nglShiny widget");
+    var stage;
+    var pdbID = el.pdbID;
+    var htmlContainer = el.htmlContainer;
+    console.log("manufacturing nglShiny widget,  el: " + el + " width: " + width + "  height: " + height)
+    //console.log("manufacturing nglShiny widget for " + pdbID + " in " + htmlContainer);
+
+    Shiny.addCustomMessageHandler("fit", function(message){
+        var htmlContainer = message.htmlContainer;
+        console.log("in factory, nglShiny fit")
+        console.log(message)
+        console.log("pdbID: " + pdbID)
+        console.log("htmlContainer: " + htmlContainer);
+        var stage = document.getElementById(htmlContainer).stage;
+        console.log("stage: " + stage)
+        stage.autoView()
+        })
+
     return {
        renderValue: function(options) {
           console.log("---- options");
           console.log(options);
-          window.options = options;	   
-          var stage;
-          stage = new NGL.Stage(el, {backgroundColor:'beige'});
-          window.stage = stage;
-          uri = "rcsb://" + options.pdbID;
-          window.pdbID = options.pdbID;
+          pdbID = options.pdbID;
+          htmlContainer = options.htmlContainer;
+          var stage = new NGL.Stage(htmlContainer, {backgroundColor:'beige'});
+          document.getElementById(htmlContainer).stage = stage;
+          uri = "rcsb://" + pdbID;
           stage.loadFile(uri, {defaultRepresentation: false}).then(function(o){
 	      o.autoView()
               var namedComponentsProvided = Object.keys(options).indexOf("namedComponents") >= 0;
@@ -53,13 +70,18 @@ HTMLWidgets.widget({
                   } // if options.namedComponents
               }) // then 
           },
-       resize: function(width, height) {
+       resize: function(width, height){
           console.log("entering resize");
           correctedHeight = window.innerHeight * 0.9;
           $("#nglShiny").height(correctedHeight);
           console.log("nglShiny.resize: " + width + ", " + correctedHeight + ": " + height);
           stage.handleResize()
-          }
+          }, 
+
+        fit: function(){
+           console.log("fit " + pdbID);
+           },
+
     } // return
   } // factory
 });  // widget
@@ -89,6 +111,7 @@ function setComponentNames(x, namedComponents)
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("fit", function(message){
 
     console.log("nglShiny fit")
+    console.log(message)
     stage.autoView()
     })
 

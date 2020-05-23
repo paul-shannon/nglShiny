@@ -23,28 +23,31 @@ ui = shinyUI(fluidPage(
     tags$link(rel="icon", href="data:;base64,iVBORw0KGgo=")
     ),
 
+
   sidebarLayout(
      sidebarPanel(
-        actionButton("fitButton", "Fit"),
-        actionButton("defaultViewButton", "Defaults"),
-        actionButton("clearRepresentationsButton", "Clear Representations"),
-        selectInput("pdbSelector", "", pdbIDs, selected=defaultPdbID),
-        selectInput("representationSelector", "", nglRepresentations, selected=defaultRepresentation),
-        selectInput("colorSchemeSelector", "", nglColorSchemes, selected=defaultColorScheme),
-        hr(),
-        width=3
+        actionButton("fitButton_1", "Fit 1"),
+        actionButton("fitButton_2", "Fit 2"),
+        width=2
         ),
      mainPanel(
-        nglShinyOutput('nglShiny'),
-        width=9
+        fluidRow(
+          column(6,nglShinyOutput('nglShiny1')),
+          column(6,nglShinyOutput('nglShiny2'))
+          ),
+        width=10
         )
      ) # sidebarLayout
 ))
 #----------------------------------------------------------------------------------------------------
 server = function(input, output, session) {
 
-  observeEvent(input$fitButton, {
-     session$sendCustomMessage(type="fit", message=list())
+  observeEvent(input$fitButton_1, {
+     fit(session, htmlContainer="nglShiny1")
+     })
+
+  observeEvent(input$fitButton_2, {
+     fit(session, htmlContainer="nglShiny2")
      })
 
   observeEvent(input$defaultViewButton, {
@@ -63,7 +66,7 @@ server = function(input, output, session) {
   observeEvent(input$pdbSelector, {
      choice = input$pdbSelector
      printf("pdb: %s", choice)
-     session$sendCustomMessage(type="setPDB", message=list(choice))
+     # session$sendCustomMessage(type="setPDB", message=list(choice))
      updateSelectInput(session, "pdbSelector", label=NULL, choices=NULL,  selected=choice)
      })
 
@@ -85,16 +88,25 @@ server = function(input, output, session) {
 
   #options <- list(pdbID="1pcr")
   #options <- list(pdbID="3kvk")
-  options <- list(pdbID="1crn")
   #options <- list(pdbID="1rqk")
 
-  output$nglShiny <- renderNglShiny(
-    nglShiny(options, 300, 300)
-    )
+  output$nglShiny1 <- renderNglShiny({
+    #options <- list(pdbID="1crn", htmlContainer="nglShiny1")
+    ngl0 = nglShiny(options=list(pdbID="1crn", htmlContainer="nglShiny1"), 300, 300, elementId="nglShiny1")
+    print("--- just created ngl0")
+    print(ngl0)
+    })
+
+  output$nglShiny2 <- renderNglShiny({
+    ngl1 = nglShiny(options=list(pdbID="4our", htmlContainer="nglShiny2"), 300, 300, elementId="nglShiny2")
+    print("--- just created ngl1")
+    print(ngl1)
+    #nglShiny(list(pdbID="4our"), options, 300, 300)
+    })
 
 } # server
 #----------------------------------------------------------------------------------------------------
-port <- 11111
+port <- 11112
 browseURL(sprintf("http://localhost:%d", port))
 runApp(shinyApp(ui=ui, server=server), port=port)
 
