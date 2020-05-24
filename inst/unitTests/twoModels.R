@@ -14,6 +14,9 @@ pdbIDs <- c("1crn",  # crambin refined against 0.945-A x-ray diffraction data.
             "1IZL")  # Crystal structure of oxygen-evolving photosystem II from Thermosynechococcus vulcanus at 3.7-A resolution
 defaultPdbID <- "1crn"
 #----------------------------------------------------------------------------------------------------
+ngl.0 <- nglShiny(options=list(pdbID="1crn", htmlContainer="nglShiny1"), 300, 300, elementId="nglShiny1")
+ngl.1 <- nglShiny(options=list(pdbID="4our", htmlContainer="nglShiny2"), 300, 300, elementId="nglShiny2")
+#----------------------------------------------------------------------------------------------------
 # 1RQK, 3I4D: Photosynthetic reaction center from rhodobacter sphaeroides 2.4.1
 # crambin, 1crn: https://bmcbiophys.biomedcentral.com/articles/10.1186/s13628-014-0008-0
 ui = shinyUI(fluidPage(
@@ -91,16 +94,11 @@ server = function(input, output, session) {
   #options <- list(pdbID="1rqk")
 
   output$nglShiny1 <- renderNglShiny({
-    #options <- list(pdbID="1crn", htmlContainer="nglShiny1")
-    ngl0 = nglShiny(options=list(pdbID="1crn", htmlContainer="nglShiny1"), 300, 300, elementId="nglShiny1")
-    print("--- just created ngl0")
-    print(ngl0)
+    ngl.0
     })
 
   output$nglShiny2 <- renderNglShiny({
-    ngl1 = nglShiny(options=list(pdbID="4our", htmlContainer="nglShiny2"), 300, 300, elementId="nglShiny2")
-    print("--- just created ngl1")
-    print(ngl1)
+    ngl.1
     #nglShiny(list(pdbID="4our"), options, 300, 300)
     })
 
