@@ -1,6 +1,39 @@
 library(shiny)
+library(shinyjs)
 library(nglShiny)
 library(htmlwidgets)
+#----------------------------------------------------------------------------------------------------
+jsCode <- "shinyjs.pageCol = function(params){$('body').css('background', params);}"
+jsHide <- "shinyjs.hideDiv = function(divName){$('#nglShiny2').hide();}"
+
+jsJustOne <- paste0("shinyjs.justOne = function(){ ",
+                    "$('#nglShiny2').parent().hide(); ",
+                    "$('#nglShiny1').parent().show(); ",
+                    "$('#nglShiny1').parent().removeClass('col-sm-6').addClass('col-sm-12').resize(); ",
+                    "}")
+
+jsJustTwo <- paste0("shinyjs.justTwo = function(){ ",
+                    "$('#nglShiny1').parent().hide(); ",
+                    "$('#nglShiny2').parent().show(); ",
+                    "$('#nglShiny2').parent().removeClass('col-sm-6').addClass('col-sm-12').resize(); ",
+                    "}")
+
+jsBoth <- paste0("shinyjs.both = function(){ ",
+                    "$('#nglShiny1').parent().show(); ",
+                    "$('#nglShiny2').parent().show(); ",
+                    "$('#nglShiny1').parent().addClass('col-sm-6').resize(); ",
+                    "$('#nglShiny2').parent().addClass('col-sm-6').resize(); ",
+                    "}")
+
+jsNone <- paste0("shinyjs.none = function(){ ",
+                    "$('#nglShiny1').parent().hide(); ",
+                    "$('#nglShiny2').parent().hide(); ",
+                    "}")
+
+# "$('#nglShiny2').parent().removeClass('col-sm-6'); ",
+
+# $("#nglShiny1").parent().removeClass("col-sm-12").addClass("col-sm-6").resize()
+
 #----------------------------------------------------------------------------------------------------
 nglRepresentations = c('angle', 'axes', 'ball+stick', 'backbone', 'base', 'cartoon', 'contact',
                        'dihedral', 'distance', 'helixorient', 'licorice', 'hyperball', 'label',
@@ -26,11 +59,23 @@ ui = shinyUI(fluidPage(
     tags$link(rel="icon", href="data:;base64,iVBORw0KGgo=")
     ),
 
+  useShinyjs(),
+  extendShinyjs(text=jsCode),
+  extendShinyjs(text=jsHide),
+  extendShinyjs(text=jsNone),
+  extendShinyjs(text=jsJustOne),
+  extendShinyjs(text=jsJustTwo),
+  extendShinyjs(text=jsBoth),
 
   sidebarLayout(
      sidebarPanel(
         actionButton("fitButton_1", "Fit 1"),
         actionButton("fitButton_2", "Fit 2"),
+        actionButton("hideButton_2", "Hide2 2"),
+        radioButtons("vw", "Visible Windows:",
+                     c("none", "one", "two", "both"),
+                     selected="none"
+                     ),
         width=2
         ),
      mainPanel(
@@ -44,6 +89,31 @@ ui = shinyUI(fluidPage(
 ))
 #----------------------------------------------------------------------------------------------------
 server = function(input, output, session) {
+
+  observeEvent(input$vw, ignoreInit = TRUE, {
+     newChoice <- input$vw
+     printf("vw: %s", newChoice)
+     if(newChoice == "one"){
+        js$justOne()
+        }
+     if(newChoice == "two"){
+        js$justTwo()
+        }
+     if(newChoice == "both"){
+        js$both()
+        }
+     if(newChoice == "none"){
+       js$none()
+       }
+     }) # vw
+
+  #observeEvent(input$color, {
+  #   js$pageCol(input$color)
+  #   })
+
+  observeEvent(input$hideButton_2, {
+     js$hideDiv("#nglShiny2");
+     })
 
   observeEvent(input$fitButton_1, {
      fit(session, htmlContainer="nglShiny1")
