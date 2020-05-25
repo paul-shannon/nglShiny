@@ -71,10 +71,12 @@ HTMLWidgets.widget({
               }) // then 
           },
        resize: function(width, height){
-          console.log("entering resize");
+          console.log("entering resize of htmlContainer: " + htmlContainer);
           correctedHeight = window.innerHeight * 0.9;
-          $("#nglShiny").height(correctedHeight);
+          // $("#nglShiny").height(correctedHeight);
+          $(htmlContainer).height(correctedHeight);
           console.log("nglShiny.resize: " + width + ", " + correctedHeight + ": " + height);
+          var stage = document.getElementById(htmlContainer).stage;
           stage.handleResize()
           }, 
 

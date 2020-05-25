@@ -11,3 +11,7 @@ demo:
 
 twoModels:
 	R -f inst/unitTests/twoModels.R
+
+twoModelsConditionalDisplay:
+	R -f inst/unitTests/twoModelsConditionalDisplay.R
+
