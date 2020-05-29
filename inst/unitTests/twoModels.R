@@ -8,21 +8,23 @@ jsHide <- "shinyjs.hideDiv = function(divName){$('#nglShiny2').hide();}"
 
 jsJustOne <- paste0("shinyjs.justOne = function(){ ",
                     "$('#nglShiny2').parent().hide(); ",
-                    "$('#nglShiny1').parent().show(); ",
                     "$('#nglShiny1').parent().removeClass('col-sm-6').addClass('col-sm-12').resize(); ",
+                    "$('#nglShiny1').parent().show(); ",
                     "}")
 
 jsJustTwo <- paste0("shinyjs.justTwo = function(){ ",
                     "$('#nglShiny1').parent().hide(); ",
-                    "$('#nglShiny2').parent().show(); ",
                     "$('#nglShiny2').parent().removeClass('col-sm-6').addClass('col-sm-12').resize(); ",
+                    "$('#nglShiny2').parent().show(); ",
                     "}")
 
 jsBoth <- paste0("shinyjs.both = function(){ ",
-                    "$('#nglShiny1').parent().show(); ",
-                    "$('#nglShiny2').parent().show(); ",
+                    "$('#nglShiny1').parent().hide(); ",
+                    "$('#nglShiny2').parent().hide(); ",
                     "$('#nglShiny1').parent().addClass('col-sm-6').resize(); ",
                     "$('#nglShiny2').parent().addClass('col-sm-6').resize(); ",
+                    "$('#nglShiny1').parent().show(); ",
+                    "$('#nglShiny2').parent().show(); ",
                     "}")
 
 jsNone <- paste0("shinyjs.none = function(){ ",
@@ -69,12 +71,13 @@ ui = shinyUI(fluidPage(
 
   sidebarLayout(
      sidebarPanel(
-        actionButton("fitButton_1", "Fit 1"),
-        actionButton("fitButton_2", "Fit 2"),
-        actionButton("hideButton_2", "Hide2 2"),
+        wellPanel(
+          actionButton("fitButton_1", "Fit 1"),
+          actionButton("fitButton_2", "Fit 2")
+          ),
         radioButtons("vw", "Visible Windows:",
                      c("none", "one", "two", "both"),
-                     selected="none"
+                     selected="both"
                      ),
         width=2
         ),
@@ -106,14 +109,6 @@ server = function(input, output, session) {
        js$none()
        }
      }) # vw
-
-  #observeEvent(input$color, {
-  #   js$pageCol(input$color)
-  #   })
-
-  observeEvent(input$hideButton_2, {
-     js$hideDiv("#nglShiny2");
-     })
 
   observeEvent(input$fitButton_1, {
      fit(session, htmlContainer="nglShiny1")
