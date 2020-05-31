@@ -91,7 +91,7 @@ renderNglShiny <- function(expr, env = parent.frame(), quoted = FALSE)
       expr <- substitute(expr)
       } # force quoted
 
-  htmlwidgets::shinyRenderWidget(expr, nglShinyOutput, env, quoted = TRUE)
+   htmlwidgets::shinyRenderWidget(expr, nglShinyOutput, env, quoted = TRUE)
 
 } # renderNglShiny
 #----------------------------------------------------------------------------------------------------
@@ -117,9 +117,11 @@ fit <- function(session, htmlContainer)
 
 } # fit
 #----------------------------------------------------------------------------------------------------
-setRepresentation <- function(session, rep)
+setRepresentation <- function(session, htmlContainer, rep)
 {
-   session$sendCustomMessage("setRepresentation", list(rep))
+    session$sendCustomMessage("setRepresentation",
+                              list(htmlContainer=htmlContainer,
+                                   representation=rep))
 
 } # setRepresentation
 #----------------------------------------------------------------------------------------------------
@@ -166,10 +168,11 @@ showSelection <- function(session, representation, selection, name, colorScheme=
 #'
 #' @export
 #'
-setVisibility <- function(session, representationName, newVisibilityState)
+setVisibility <- function(session, htmlContainer, representationName, newVisibilityState)
 {
     session$sendCustomMessage("setVisibility",
-                              list(representationName=representationName,
+                              list(htmlContainer=htmlContainer,
+                                   representationName=representationName,
                                    newState=newVisibilityState))
 
 } # setVisibility

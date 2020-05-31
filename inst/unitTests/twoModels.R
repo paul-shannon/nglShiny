@@ -32,28 +32,18 @@ jsNone <- paste0("shinyjs.none = function(){ ",
                     "$('#nglShiny2').parent().hide(); ",
                     "}")
 
-# "$('#nglShiny2').parent().removeClass('col-sm-6'); ",
-
-# $("#nglShiny1").parent().removeClass("col-sm-12").addClass("col-sm-6").resize()
-
 #----------------------------------------------------------------------------------------------------
-nglRepresentations = c('angle', 'axes', 'ball+stick', 'backbone', 'base', 'cartoon', 'contact',
-                       'dihedral', 'distance', 'helixorient', 'licorice', 'hyperball', 'label',
-                       'line', 'surface', 'point', 'ribbon', 'rocket', 'rope', 'spacefill', 'trace', 'unitcell',
-                       'validation')
-nglColorSchemes <- c('residueIndex', 'chainIndex', 'entityType', 'entityIndex')
-defaultRepresentation <- "cartoon"
-defaultColorScheme <- "residueIndex"
-pdbIDs <- c("1crn",  # crambin refined against 0.945-A x-ray diffraction data.
-            "2UWS",  # photosynthetic reaction center from Rb. sphaeroides, pH 6.5, charge-separated state
-            "1IZL")  # Crystal structure of oxygen-evolving photosystem II from Thermosynechococcus vulcanus at 3.7-A resolution
-defaultPdbID <- "1crn"
+# nglRepresentations = c('angle', 'axes', 'ball+stick', 'backbone', 'base', 'cartoon', 'contact',
+#                       'dihedral', 'distance', 'helixorient', 'licorice', 'hyperball', 'label',
+#                       'line', 'surface', 'point', 'ribbon', 'rocket', 'rope', 'spacefill', 'trace', 'unitcell',
+#                       'validation')
+# nglColorSchemes <- c('residueIndex', 'chainIndex', 'entityType', 'entityIndex')
+# defaultRepresentation <- "cartoon"
+# defaultColorScheme <- "residueIndex"
 #----------------------------------------------------------------------------------------------------
 ngl.0 <- nglShiny(options=list(pdbID="1crn", htmlContainer="nglShiny1"), 300, 300, elementId="nglShiny1")
 ngl.1 <- nglShiny(options=list(pdbID="4our", htmlContainer="nglShiny2"), 300, 300, elementId="nglShiny2")
 #----------------------------------------------------------------------------------------------------
-# 1RQK, 3I4D: Photosynthetic reaction center from rhodobacter sphaeroides 2.4.1
-# crambin, 1crn: https://bmcbiophys.biomedcentral.com/articles/10.1186/s13628-014-0008-0
 ui = shinyUI(fluidPage(
 
   tags$head(
@@ -172,5 +162,6 @@ server = function(input, output, session) {
 port <- 11112
 browseURL(sprintf("http://localhost:%d", port))
 runApp(shinyApp(ui=ui, server=server), port=port)
+#app <- shinyApp(ui=ui, server=server)
 
 

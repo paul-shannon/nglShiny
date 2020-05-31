@@ -207,9 +207,11 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("showSelection", functio
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setVisibility", function(message){
 
+    var htmlContainer = message.htmlContainer;
     var repName = message.representationName;
     var newState = message.newState;
     console.log("set visibility " + repName + "  " + newState)
+    var stage = document.getElementById(htmlContainer).stage;
     stage.getRepresentationsByName(repName).setVisibility(newState)
     })
 
