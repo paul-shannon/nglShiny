@@ -11,19 +11,18 @@ HTMLWidgets.widget({
       
 
   factory: function(el, width, height) {
-    var stage;
     var pdbID = el.pdbID;
     var htmlContainer = el.htmlContainer;
     console.log("manufacturing nglShiny widget,  el: " + el + " width: " + width + "  height: " + height)
     //console.log("manufacturing nglShiny widget for " + pdbID + " in " + htmlContainer);
 
     Shiny.addCustomMessageHandler("fit", function(message){
-        var htmlContainer = message.htmlContainer;
+        //var htmlContainer = message.htmlContainer;
         console.log("in factory, nglShiny fit")
         console.log(message)
         console.log("pdbID: " + pdbID)
-        console.log("htmlContainer: " + htmlContainer);
-        var stage = document.getElementById(htmlContainer).stage;
+        //console.log("htmlContainer: " + htmlContainer);
+        //stage = document.getElementById(htmlContainer).stage;
         console.log("stage: " + stage)
         stage.autoView()
         })
@@ -34,11 +33,10 @@ HTMLWidgets.widget({
           console.log(options);
           pdbID = options.pdbID;
           htmlContainer = options.htmlContainer;
-          var stage = new NGL.Stage(htmlContainer, {backgroundColor:'beige'});
+          stage = new NGL.Stage(htmlContainer, {backgroundColor:'beige'});
           document.getElementById(htmlContainer).stage = stage;
           uri = "rcsb://" + pdbID;
           stage.loadFile(uri, {defaultRepresentation: false}).then(function(o){
-	      o.autoView()
               var namedComponentsProvided = Object.keys(options).indexOf("namedComponents") >= 0;
               if(!namedComponentsProvided){
                  console.log("--- no namedComponentsProvided, using cartoon + residueIndex")
@@ -68,6 +66,7 @@ HTMLWidgets.widget({
                         })
                      } // for i
                   } // if options.namedComponents
+	      o.autoView();
               }) // then 
           },
        resize: function(width, height){
@@ -110,13 +109,13 @@ function setComponentNames(x, namedComponents)
 
 } // setComponentNames
 //------------------------------------------------------------------------------------------------------------------------
-if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("fit", function(message){
-
-    console.log("nglShiny fit")
-    console.log(message)
-    stage.autoView()
-    })
-
+//if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("fit", function(message){
+//
+//    console.log("nglShiny fit")
+//    console.log(message)
+//    stage.autoView()
+//    })
+//
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("removeAllRepresentations", function(message){
 
@@ -147,16 +146,18 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setColorScheme", functi
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setPDB", function(message){
 
-   //debugger;
-
+   console.log("--- setPDB");
+   console.log(message);
    if(typeof(stage) != "undefined")
       stage.removeAllComponents()
 
-    var uri = message.uri;
+    var uri = "rcsb://" + message.pdbID;
     console.log(" about to loadFile: " + uri);
-    stage.loadFile(uri, {ext: "pdb", defaultRepresentation: true}).then(function(o){
+    //stage.loadFile(uri, {ext: "pdb", defaultRepresentation: true}).then(function(o){
+    stage.loadFile(uri, {defaultRepresentation: false}).then(function(o){
+        console.log("--- stage.loadFile then block")
         o.autoView()
-        stage.autoView()
+        o.addRepresentation("cartoon", {sele: "all", colorScheme: "residueIndex"});
         })
     //stage.loadFile(uri).then(function(comp){
     //  comp.addRepresentation("cartoon", {colorScheme: "residueIndex"});

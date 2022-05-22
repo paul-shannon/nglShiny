@@ -85,11 +85,11 @@ server = function(input, output, session) {
 
   #options <- list(pdbID="1pcr")
   #options <- list(pdbID="3kvk")
-  options <- list(pdbID="1crn")
+  options <- list(pdbID="1crn", htmlContainer="nglShiny")
   #options <- list(pdbID="1rqk")
 
   output$nglShiny <- renderNglShiny(
-    nglShiny(options, 300, 300)
+    nglShiny(options, 300, 300, elementId="nglShiny")
     )
 
 } # server

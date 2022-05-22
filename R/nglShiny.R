@@ -28,7 +28,7 @@ printf <- function(...) print(noquote(sprintf(...)))
 #'
 #' @return a reference to an htmlwidget.
 #'
-nglShiny <- function(options, width = NULL, height = NULL, elementId)
+nglShiny <- function(options, width = NULL, height = NULL)
 {
   printf("--- ~/github/nglShiny/R/nglShiny ctor");
 
@@ -41,8 +41,8 @@ nglShiny <- function(options, width = NULL, height = NULL, elementId)
     width = width,
     height = height,
     # sizingPolicy = htmlwidgets::sizingPolicy(padding=0, browser.fill=TRUE),
-    package = 'nglShiny',
-    elementId = elementId
+    package = 'nglShiny'
+    #elementId = elementId
     )
 
 } # nglShiny constructor

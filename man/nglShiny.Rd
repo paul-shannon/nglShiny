@@ -4,9 +4,9 @@
 \alias{nglShiny}
 \title{nglShiny}
 \usage{
-nglShiny(options, width = NULL, height = NULL, elementId)
+nglShiny(options, width = NULL, height = NULL)
 
-nglShiny(options, width = NULL, height = NULL, elementId)
+nglShiny(options, width = NULL, height = NULL)
 }
 \arguments{
 \item{width}{integer  initial width of the widget.}

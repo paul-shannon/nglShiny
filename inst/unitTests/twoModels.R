@@ -41,8 +41,9 @@ jsNone <- paste0("shinyjs.none = function(){ ",
 # defaultRepresentation <- "cartoon"
 # defaultColorScheme <- "residueIndex"
 #----------------------------------------------------------------------------------------------------
-ngl.0 <- nglShiny(options=list(pdbID="1crn", htmlContainer="nglShiny1"), 300, 300, elementId="nglShiny1")
+ngl.0 <- nglShiny(options=list(pdbID="2UWS", htmlContainer="nglShiny1"), 300, 300, elementId="nglShiny1")
 ngl.1 <- nglShiny(options=list(pdbID="4our", htmlContainer="nglShiny2"), 300, 300, elementId="nglShiny2")
+
 #----------------------------------------------------------------------------------------------------
 ui = shinyUI(fluidPage(
 
@@ -52,12 +53,12 @@ ui = shinyUI(fluidPage(
     ),
 
   useShinyjs(),
-  extendShinyjs(text=jsCode),
-  extendShinyjs(text=jsHide),
-  extendShinyjs(text=jsNone),
-  extendShinyjs(text=jsJustOne),
-  extendShinyjs(text=jsJustTwo),
-  extendShinyjs(text=jsBoth),
+  extendShinyjs(text=jsCode, functions="pageCol"),
+  extendShinyjs(text=jsHide, functions="hideDiv"),
+  extendShinyjs(text=jsNone, functions="none"),
+  extendShinyjs(text=jsJustOne, functions="justOne"),
+  extendShinyjs(text=jsJustTwo, functions="justTwo"),
+  extendShinyjs(text=jsBoth, functions="both"),
 
   sidebarLayout(
      sidebarPanel(

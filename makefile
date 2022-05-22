@@ -15,3 +15,7 @@ twoModels:
 twoModelsConditionalDisplay:
 	R -f inst/unitTests/twoModelsConditionalDisplay.R
 
+
+rstudio:
+	open -a Rstudio  inst/unitTests/minimalDemoApp.R
+
