@@ -28,11 +28,12 @@ printf <- function(...) print(noquote(sprintf(...)))
 #'
 #' @return a reference to an htmlwidget.
 #'
-nglShiny <- function(options, width = NULL, height = NULL, elementId = NULL)
+nglShiny <- function(options, width = NULL, height = NULL)
 {
   printf("--- ~/github/nglShiny/R/nglShiny ctor");
 
   stopifnot("pdbID" %in% names(options))
+  stopifnot("htmlContainer" %in% names(options))
 
   htmlwidgets::createWidget(
     name = 'nglShiny',
@@ -40,8 +41,8 @@ nglShiny <- function(options, width = NULL, height = NULL, elementId = NULL)
     width = width,
     height = height,
     # sizingPolicy = htmlwidgets::sizingPolicy(padding=0, browser.fill=TRUE),
-    package = 'nglShiny',
-    elementId = elementId
+    package = 'nglShiny'
+    #elementId = elementId
     )
 
 } # nglShiny constructor
@@ -90,13 +91,14 @@ renderNglShiny <- function(expr, env = parent.frame(), quoted = FALSE)
       expr <- substitute(expr)
       } # force quoted
 
-  htmlwidgets::shinyRenderWidget(expr, nglShinyOutput, env, quoted = TRUE)
+   htmlwidgets::shinyRenderWidget(expr, nglShinyOutput, env, quoted = TRUE)
 
 } # renderNglShiny
 #----------------------------------------------------------------------------------------------------
 #' Set zoom and center so that the current model nicely fills the display.
 #'
 #' @param session a Shiny server session object.
+#' @param htmlContainer a character string used to identify the nglShiny instance, the id of html element
 #'
 #' @examples
 #' \dontrun{
@@ -109,15 +111,17 @@ renderNglShiny <- function(expr, env = parent.frame(), quoted = FALSE)
 #'
 #' @export
 #'
-fit <- function(session)
+fit <- function(session, htmlContainer)
 {
-   session$sendCustomMessage("fit", list())
+   session$sendCustomMessage("fit", message=list(htmlContainer=htmlContainer))
 
 } # fit
 #----------------------------------------------------------------------------------------------------
-setRepresentation <- function(session, rep)
+setRepresentation <- function(session, htmlContainer, rep)
 {
-   session$sendCustomMessage("setRepresentation", list(rep))
+    session$sendCustomMessage("setRepresentation",
+                              list(htmlContainer=htmlContainer,
+                                   representation=rep))
 
 } # setRepresentation
 #----------------------------------------------------------------------------------------------------
@@ -164,10 +168,11 @@ showSelection <- function(session, representation, selection, name, colorScheme=
 #'
 #' @export
 #'
-setVisibility <- function(session, representationName, newVisibilityState)
+setVisibility <- function(session, htmlContainer, representationName, newVisibilityState)
 {
     session$sendCustomMessage("setVisibility",
-                              list(representationName=representationName,
+                              list(htmlContainer=htmlContainer,
+                                   representationName=representationName,
                                    newState=newVisibilityState))
 
 } # setVisibility

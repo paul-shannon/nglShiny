@@ -32,11 +32,11 @@ ui = shinyUI(fluidPage(
         selectInput("representationSelector", "", nglRepresentations, selected=defaultRepresentation),
         selectInput("colorSchemeSelector", "", nglColorSchemes, selected=defaultColorScheme),
         hr(),
-        width=2
+        width=3
         ),
      mainPanel(
         nglShinyOutput('nglShiny'),
-        width=10
+        width=9
         )
      ) # sidebarLayout
 ))
@@ -85,14 +85,17 @@ server = function(input, output, session) {
 
   #options <- list(pdbID="1pcr")
   #options <- list(pdbID="3kvk")
-  options <- list(pdbID="1crn")
+  options <- list(pdbID="1crn", htmlContainer="nglShiny")
   #options <- list(pdbID="1rqk")
 
   output$nglShiny <- renderNglShiny(
-    nglShiny(options, 300, 300)
+    nglShiny(options, 300, 300, elementId="nglShiny")
     )
 
 } # server
 #----------------------------------------------------------------------------------------------------
-app <- shinyApp(ui=ui, server=server)
+port <- 11111
+browseURL(sprintf("http://localhost:%d", port))
+runApp(shinyApp(ui=ui, server=server), port=port)
+
 
