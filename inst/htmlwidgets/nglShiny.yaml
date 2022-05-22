@@ -1,7 +1,9 @@
 dependencies:
-  - name: igv
-    version: 1.0.20
-    src: htmlwidgets
-    script: ./lib/ngl.js
+  - name: ngl
+    version: 1.2
+    src: htmlwidgets/lib
+    script: ngl.js
+
+
 
 
