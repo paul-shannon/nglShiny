@@ -1,4 +1,7 @@
-default: roxy install
+default:
+	@echo targets: basic [roxy install] demo
+
+basic: roxy install
 
 install:
 	R CMD INSTALL .

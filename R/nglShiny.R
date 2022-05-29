@@ -117,6 +117,22 @@ fit <- function(session, htmlContainer)
 
 } # fit
 #----------------------------------------------------------------------------------------------------
+#' set the new spin state
+#'
+#' @param session a Shiny server session object.
+#' @param newState logical, either TRUE or FALSE
+#'
+#' @aliases spin
+#' @rdname spin
+#'
+#' @export
+#'
+spin <- function(session, newState)
+{
+   session$sendCustomMessage("spin", message=list(newState=newState))
+
+} # spin
+#----------------------------------------------------------------------------------------------------
 setRepresentation <- function(session, htmlContainer, rep)
 {
     session$sendCustomMessage("setRepresentation",

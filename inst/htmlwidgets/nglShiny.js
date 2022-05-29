@@ -48,22 +48,25 @@ HTMLWidgets.widget({
                   console.log("--- componentNames");
                   console.log(componentNames);
 		  for (i=0; i < componentNames.length; i++){ 
-                     var name = componentNames[i];
-                     console.log("==== adding rep for " + name);
-                     component = namedComponents[name];
+                     var componentName = componentNames[i];
+                     component = namedComponents[componentName];
+                     var givenName = component.name;
+                     console.log("==== adding rep for " + givenName);
                      var rep = component.representation;
 		     var selection = component.selection;
 		     var colorScheme = component.colorScheme;
                      console.log("rep: " + rep);
                      console.log("selection: " + selection);
-                     console.log("name: " + name);
+                     console.log("givenName: " + givenName);
                      console.log("colorScheme: " + colorScheme);
-                     o.addRepresentation(rep, {
+                     var newRep = o.addRepresentation(rep, {
                         sele: selection,
-			name: name,
+			name: givenName,
                         colorScheme: colorScheme,
 			visible: component.visible
                         })
+                      console.log("status of addRepresentation(" + givenName + "): " +
+                                  newRep.repr.dataList.length);
                      } // for i
                   } // if options.namedComponents
 	      o.autoView();
@@ -116,6 +119,16 @@ function setComponentNames(x, namedComponents)
 //    stage.autoView()
 //    })
 //
+//------------------------------------------------------------------------------------------------------------------------
+if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("spin", function(message){
+
+    if(typeof(stage) != "undefined"){
+       var newState = message.newState;
+       console.log("--- spin " + newState)
+       stage.setSpin(newState);
+       }
+    })
+
 //------------------------------------------------------------------------------------------------------------------------
 if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("removeAllRepresentations", function(message){
 
