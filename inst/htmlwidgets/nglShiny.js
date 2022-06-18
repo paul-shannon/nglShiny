@@ -12,10 +12,13 @@ HTMLWidgets.widget({
 
   factory: function(el, width, height) {
     var pdbID = el.pdbID;
+    window.pdbID = el.pdbID;
     var htmlContainer = el.htmlContainer;
     console.log("manufacturing nglShiny widget,  el: " + el + " width: " + width + "  height: " + height)
     //console.log("manufacturing nglShiny widget for " + pdbID + " in " + htmlContainer);
 
+       // see Automatic View, default focused on all representation, selection string
+       // to center a specific component.
     Shiny.addCustomMessageHandler("fit", function(message){
         //var htmlContainer = message.htmlContainer;
         console.log("in factory, nglShiny fit")
@@ -227,6 +230,19 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setVisibility", functio
     console.log("set visibility " + repName + "  " + newState)
     var stage = document.getElementById(htmlContainer).stage;
     stage.getRepresentationsByName(repName).setVisibility(newState)
+    })
+
+//------------------------------------------------------------------------------------------------------------------------
+if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("center", function(message){
+
+    var htmlContainer = message.htmlContainer;
+    var selectionString = message.selectionString;
+    var stage = document.getElementById(htmlContainer).stage;
+       // window.pdbID  '1S5L'
+    var duration = 1;
+    console.log("center " + selectionString + "  duration: " + duration);
+       // todo: duration does not work (18 jun 2022)
+    stage.getComponentsByName(window.pdbID).autoView(selectionString);
     })
 
 //------------------------------------------------------------------------------------------------------------------------

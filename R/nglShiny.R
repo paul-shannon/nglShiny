@@ -193,6 +193,30 @@ setVisibility <- function(session, htmlContainer, representationName, newVisibil
 
 } # setVisibility
 #----------------------------------------------------------------------------------------------------
+#' place the specified representation into the center of ngl's stage
+#'
+#' @param session a Shiny server session object.
+#' @param htmlContainer character
+#' @param selectionString character using ngl's selection language
+#'
+#' @examples
+#' \dontrun{
+#' center(session, htmlContainer="nglShiny_1s5l", "OEC AND :A")
+#'}
+#'
+#' @aliases center
+#' @rdname center
+#'
+#' @export
+#'
+center <- function(session, htmlContainer, selectionString)
+{
+    session$sendCustomMessage("center",
+                              list(htmlContainer=htmlContainer,
+                                   selectionString=selectionString))
+
+} # center
+#----------------------------------------------------------------------------------------------------
 setColorScheme <- function(session, newColorScheme)
 {
    session$sendCustomMessage("setRepresentation", list(newColorScheme))
