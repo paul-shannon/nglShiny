@@ -41,6 +41,7 @@ HTMLWidgets.widget({
           uri = "rcsb://" + pdbID;
           stage.loadFile(uri, {defaultRepresentation: false}).then(function(o){
               var namedComponentsProvided = Object.keys(options).indexOf("namedComponents") >= 0;
+              o.autoView()
               if(!namedComponentsProvided){
                  console.log("--- no namedComponentsProvided, using cartoon + residueIndex")
                  o.addRepresentation("cartoon", {sele: "all", colorScheme: "residueIndex"});
@@ -72,9 +73,8 @@ HTMLWidgets.widget({
                                   newRep.repr.dataList.length);
                      } // for i
                   } // if options.namedComponents
-	      o.autoView();
               }) // then 
-          },
+       },
        resize: function(width, height){
           console.log("entering resize of htmlContainer: " + htmlContainer);
           correctedHeight = window.innerHeight * 0.9;
@@ -191,7 +191,7 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setLocalPDB", function(
     var stringBlob = new Blob( [ uri ], { type: 'text/plain'} );
     console.log("nglShiny setPDB:");
     stage.loadFile(stringBlob, {ext: "pdb", defaultRepresentation: true}).then(function (o) {
-      o.auto.View()
+      o.autoView()
     });
 });
 
@@ -243,6 +243,15 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("center", function(messa
     console.log("center " + selectionString + "  duration: " + duration);
        // todo: duration does not work (18 jun 2022)
     stage.getComponentsByName(window.pdbID).autoView(selectionString);
+    })
+
+//------------------------------------------------------------------------------------------------------------------------
+if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setCameraDistance", function(message){
+
+    var htmlContainer = message.htmlContainer;
+    var newDistance = message.distance
+    var stage = document.getElementById(htmlContainer).stage;
+    stage.viewerControls.distance(newDistance)
     })
 
 //------------------------------------------------------------------------------------------------------------------------

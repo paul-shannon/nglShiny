@@ -217,6 +217,25 @@ center <- function(session, htmlContainer, selectionString)
 
 } # center
 #----------------------------------------------------------------------------------------------------
+#' reposition the camera at the specified distance from the current focus
+#'
+#' @param session a Shiny server session object.
+#' @param htmlContainer character
+#' @param newDistance integer between e.g. 0 and 1000
+#'
+#' @aliases setCameraDistance
+#' @rdname setCameraDistance
+#'
+#' @export
+#'
+setCameraDistance <- function(session, htmlContainer, newDistance)
+{
+    session$sendCustomMessage("setCameraDistance",
+                              list(htmlContainer=htmlContainer,
+                                   distance=newDistance))
+
+} # center
+#----------------------------------------------------------------------------------------------------
 setColorScheme <- function(session, newColorScheme)
 {
    session$sendCustomMessage("setRepresentation", list(newColorScheme))
