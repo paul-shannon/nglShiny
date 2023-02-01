@@ -39,6 +39,11 @@ HTMLWidgets.widget({
           stage = new NGL.Stage(htmlContainer, {backgroundColor:'beige'});
           document.getElementById(htmlContainer).stage = stage;
           uri = "rcsb://" + pdbID;
+          debugger;
+          if(pdbID.startsWith("http"))
+             uri = pdbID
+          console.log(" pdbID: " + pdbID)
+          console.log("   uri: " + uri)
           stage.loadFile(uri, {defaultRepresentation: false}).then(function(o){
               var namedComponentsProvided = Object.keys(options).indexOf("namedComponents") >= 0;
               o.autoView()
@@ -167,7 +172,14 @@ if(HTMLWidgets.shinyMode) Shiny.addCustomMessageHandler("setPDB", function(messa
    if(typeof(stage) != "undefined")
       stage.removeAllComponents()
 
-    var uri = "rcsb://" + message.pdbID;
+    var pdbID = message.pdbID;
+    var uri;
+    if(pdbID.startsWith("http")){
+        uri = pdbID;
+    } else {
+       uri = "rcsb://" + message.pdbID;
+       }
+   
     console.log(" about to loadFile: " + uri);
     //stage.loadFile(uri, {ext: "pdb", defaultRepresentation: true}).then(function(o){
     stage.loadFile(uri, {defaultRepresentation: false}).then(function(o){

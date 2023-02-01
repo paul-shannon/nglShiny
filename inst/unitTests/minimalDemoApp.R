@@ -11,7 +11,11 @@ defaultRepresentation <- "cartoon"
 defaultColorScheme <- "residueIndex"
 pdbIDs <- c("1crn",  # crambin refined against 0.945-A x-ray diffraction data.
             "2UWS",  # photosynthetic reaction center from Rb. sphaeroides, pH 6.5, charge-separated state
-            "1IZL")  # Crystal structure of oxygen-evolving photosystem II from Thermosynechococcus vulcanus at 3.7-A resolution
+            "1IZL",  # Crystal structure of oxygen-evolving photosystem II from Thermosynechococcus vulcanus at 3.7-A resolution
+            "http://localhost:60050/pdb/1s5l.pdb",
+            "http://localhost:60050/pdb/6w1-all.pdb",
+            "http://localhost:8000/6w1-all.pdb"
+            )
 defaultPdbID <- "1crn"
 #----------------------------------------------------------------------------------------------------
 # 1RQK, 3I4D: Photosynthetic reaction center from rhodobacter sphaeroides 2.4.1
@@ -63,7 +67,7 @@ server = function(input, output, session) {
   observeEvent(input$pdbSelector, {
      choice = input$pdbSelector
      printf("pdb: %s", choice)
-     session$sendCustomMessage(type="setPDB", message=list(choice))
+     session$sendCustomMessage(type="setPDB", message=list(pdbID=choice))
      updateSelectInput(session, "pdbSelector", label=NULL, choices=NULL,  selected=choice)
      })
 
@@ -89,12 +93,12 @@ server = function(input, output, session) {
   #options <- list(pdbID="1rqk")
 
   output$nglShiny <- renderNglShiny(
-    nglShiny(options, 300, 300, elementId="nglShiny")
+    nglShiny(options, 300, 300) # , elementId="nglShiny")
     )
 
 } # server
 #----------------------------------------------------------------------------------------------------
-port <- 11111
+port <- 11199
 browseURL(sprintf("http://localhost:%d", port))
 runApp(shinyApp(ui=ui, server=server), port=port)
 

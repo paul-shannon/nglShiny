@@ -9,10 +9,9 @@ nglRepresentations = c('angle', 'axes', 'ball+stick', 'backbone', 'base', 'carto
 nglColorSchemes <- c('residueIndex', 'chainIndex', 'entityType', 'entityIndex')
 defaultRepresentation <- "cartoon"
 defaultColorScheme <- "residueIndex"
-pdbIDs <- c("1crn",  # crambin refined against 0.945-A x-ray diffraction data.
-            "2UWS",  # photosynthetic reaction center from Rb. sphaeroides, pH 6.5, charge-separated state
-            "1IZL")  # Crystal structure of oxygen-evolving photosystem II from Thermosynechococcus vulcanus at 3.7-A resolution
-defaultPdbID <- "1crn"
+pdbIDs <- c("http://localhost:60050/pdb/1crn.pdb",
+            "http://localhost:60050/pdb/1s5l.pdb")
+defaultPdbID <- pdbIDs[2]
 #----------------------------------------------------------------------------------------------------
 # 1RQK, 3I4D: Photosynthetic reaction center from rhodobacter sphaeroides 2.4.1
 # crambin, 1crn: https://bmcbiophys.biomedcentral.com/articles/10.1186/s13628-014-0008-0
@@ -83,10 +82,7 @@ server = function(input, output, session) {
 
   output$value <- renderPrint({ input$action})
 
-  #options <- list(pdbID="1pcr")
-  #options <- list(pdbID="3kvk")
-  options <- list(pdbID="1crn", htmlContainer="nglShiny")
-  #options <- list(pdbID="1rqk")
+  options <- list(pdbID="http://localhost:60050/pdb/1crn.pdb", htmlContainer="nglShiny")
 
   output$nglShiny <- renderNglShiny(
     nglShiny(options, 300, 300)
@@ -94,7 +90,7 @@ server = function(input, output, session) {
 
 } # server
 #----------------------------------------------------------------------------------------------------
-port <- 11111
+port <- sample(10000:15000, size=1)
 browseURL(sprintf("http://localhost:%d", port))
 runApp(shinyApp(ui=ui, server=server), port=port)
 
