@@ -39,7 +39,6 @@ HTMLWidgets.widget({
           stage = new NGL.Stage(htmlContainer, {backgroundColor:'beige'});
           document.getElementById(htmlContainer).stage = stage;
           uri = "rcsb://" + pdbID;
-          debugger;
           if(pdbID.startsWith("http"))
              uri = pdbID
           console.log(" pdbID: " + pdbID)
